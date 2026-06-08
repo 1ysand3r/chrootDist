@@ -98,7 +98,6 @@ cmd_login() {
     USR=${3:-root}
     [ -s "$IMG" ] || { echo "error: $IMG not found"; exit 1; }
     mkdir -p "$MNT"
-    chcon -R u:object_r:system_data_file:s0 "$MNT"
 
     SSN=$(cat "$SSNFL" 2>/dev/null || true); SSN=${SSN:-0}
 
