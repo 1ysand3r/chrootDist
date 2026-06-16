@@ -118,7 +118,9 @@ cmd_login() {
         LOOP=$(losetup -f)
         losetup $LOOP "$IMG" && echo $LOOP > "$LOOPFL"
         m -o suid,dev,noatime $LOOP "$MNT"
-        for i in /sys /proc /dev; do m --bind $i "$MNT$i"; m --make-rslave "$MNT$i"; done
+        m -t proc proc "$MNT/proc"; m --make-rslave "$MNT/proc"
+        m -t sysfs /sys "$MNT/sys"; m --make-rslave "$MNT/sys"
+        m --bind /dev "$MNT/dev"; m --make-rslave "$MNT/dev"
         m -t devpts -o gid=5,mode=620 devpts "$MNT/dev/pts"
         mkdir -p "$MNT/dev/shm"
         m -t tmpfs -o size=256m tmpfs "$MNT/dev/shm"
